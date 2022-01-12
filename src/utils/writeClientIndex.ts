@@ -32,6 +32,7 @@ export async function writeClientIndex(
     clientName: string,
     useUnionTypes: boolean,
     exportCore: boolean,
+    exportHooks: boolean,
     exportServices: boolean,
     exportModels: boolean,
     exportSchemas: boolean,
@@ -43,6 +44,7 @@ export async function writeClientIndex(
         resolve(outputPath, 'index.ts'),
         templates.index({
             exportCore,
+            exportHooks,
             exportServices,
             exportModels,
             exportSchemas,

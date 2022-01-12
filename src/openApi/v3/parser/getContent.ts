@@ -12,6 +12,7 @@ export interface Content {
 const BASIC_MEDIA_TYPES = [
     'application/json-patch+json',
     'application/json',
+    'application/octet-stream',
     'application/x-www-form-urlencoded',
     'text/json',
     'text/plain',

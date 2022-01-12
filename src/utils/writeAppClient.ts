@@ -1,11 +1,12 @@
-import { resolve } from 'path';
+import {resolve} from 'path';
 
-import { Client } from '../client/interfaces/Client';
-import { HttpClient } from '../HttpClient';
-import { writeFile } from './fileSystem';
-import { getHttpRequestName } from './getHttpRequestName';
-import { Templates } from './registerHandlebarTemplates';
-import { sortServicesByName } from './sortServicesByName';
+import {Client} from '../client/interfaces/Client';
+import {HttpClient} from '../HttpClient';
+import {writeFile} from './fileSystem';
+import {getHttpRequestName} from './getHttpRequestName';
+import {Templates} from './registerHandlebarTemplates';
+import {sortServicesByName} from './sortServicesByName';
+import camelcase from "camelcase";
 
 /**
  * Generate App Client class using the Handlebar template and write to disk.
@@ -31,7 +32,7 @@ export async function writeAppClient(
                 .filter(s => s.name !== 'Service')
                 .map(s => ({
                     name: s.name + postfix,
-                    shortName: s.name.replace('Service', '').toLowerCase(),
+                    shortName: camelcase(s.name.replace('Service', '')),
                 })),
             service: client.services.find(s => s.name === 'Service'),
             clientName,

@@ -1,0 +1,22 @@
+{{>header}}
+
+import {
+  createContext,
+  useContext,
+  createElement,
+  ReactElement,
+} from 'react';
+import { {{{clientName}}} } from '../client';
+
+type ProviderProps<T> = {
+  children: ReactElement;
+  client: T;
+};
+
+const {{{clientName}}}Context = createContext<{{{clientName}}} | null>(null);
+{{{clientName}}}Context.displayName = '{{{clientName}}}Context';
+
+export const {{{clientName}}}Provider = ({ children, client }: ProviderProps<{{{clientName}}} | null>) =>
+        createElement({{{clientName}}}Context.Provider, { children, value: client });
+
+export const use{{{clientName}}} = () => useContext({{{clientName}}}Context);

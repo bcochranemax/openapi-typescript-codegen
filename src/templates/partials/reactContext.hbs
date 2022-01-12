@@ -1,0 +1,7 @@
+const {{{contextName}}}Context = createContext<{{{contextName}}}>(null);
+{{{contextName}}}Context.displayName = '{{{contextName}}}Context';
+
+export const {{{contextName}}}Provider = ({ children, client }: ProviderProps<{{{contextName}}}>) =>
+createElement({{{contextName}}}Context.Provider, { children, value: client });
+
+export const use{{{contextName}}} = () => useContext({{{contextName}}}Context);

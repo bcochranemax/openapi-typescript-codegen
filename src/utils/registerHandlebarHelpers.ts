@@ -10,6 +10,10 @@ export function registerHandlebarHelpers(root: {
     useOptions: boolean;
     useUnionTypes: boolean;
 }): void {
+    Handlebars.registerHelper('capitalize', function (value: string) {
+        return value[0].toUpperCase() + value.substring(1);
+    });
+
     Handlebars.registerHelper(
         'equals',
         function (this: any, a: string, b: string, options: Handlebars.HelperOptions): string {

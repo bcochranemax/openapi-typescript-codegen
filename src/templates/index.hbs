@@ -46,6 +46,19 @@ export { {{{name}}}{{{@root.postfix}}} } from './services/{{{name}}}{{{@root.pos
 {{/if}}
 {{/if}}
 
+{{#if @root.exportHooks}}
+export { {{{clientName}}}Provider, use{{{clientName}}} } from './react/context';
+{{#each services}}
+export {
+{{#each operations}}
+{{~#equals method 'GET'}}
+  use{{{capitalize name}}},
+{{/equals}}
+{{/each}}
+} from './react/use{{{capitalize name}}}{{{@root.postfix}}}';
+{{/each}}
+{{/if}}
+
 {{#if @root.exportClient}}
 export { {{{clientName}}} } from './client';
 {{/if}}

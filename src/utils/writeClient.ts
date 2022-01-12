@@ -11,6 +11,7 @@ import { writeClientIndex } from './writeClientIndex';
 import { writeClientModels } from './writeClientModels';
 import { writeClientSchemas } from './writeClientSchemas';
 import { writeClientServices } from './writeClientServices';
+import { writeClientHooks } from './writeClientHooks';
 
 /**
  * Write our OpenAPI client, using the given templates at the given output
@@ -21,6 +22,7 @@ import { writeClientServices } from './writeClientServices';
  * @param useOptions Use options or arguments functions
  * @param useUnionTypes Use union types instead of enums
  * @param exportCore: Generate core client classes
+ * @param exportHooks: Generate services
  * @param exportServices: Generate services
  * @param exportModels: Generate models
  * @param exportSchemas: Generate schemas
@@ -38,6 +40,7 @@ export async function writeClient(
     useOptions: boolean,
     useUnionTypes: boolean,
     exportCore: boolean,
+    exportHooks: boolean,
     exportServices: boolean,
     exportModels: boolean,
     exportSchemas: boolean,
@@ -47,6 +50,7 @@ export async function writeClient(
     request?: string
 ): Promise<void> {
     const outputPath = resolve(process.cwd(), output);
+    const outputPathHooks = resolve(outputPath, 'react');
     const outputPathCore = resolve(outputPath, 'core');
     const outputPathModels = resolve(outputPath, 'models');
     const outputPathSchemas = resolve(outputPath, 'schemas');
@@ -77,6 +81,22 @@ export async function writeClient(
         );
     }
 
+    if (exportHooks) {
+        await rmdir(outputPathHooks);
+        await mkdir(outputPathHooks);
+        await writeClientHooks(
+            client.services,
+            templates,
+            outputPathHooks,
+            httpClient,
+            useUnionTypes,
+            useOptions,
+            postfix,
+            exportClient,
+            clientName
+        );
+    }
+
     if (exportSchemas) {
         await rmdir(outputPathSchemas);
         await mkdir(outputPathSchemas);
@@ -93,7 +113,7 @@ export async function writeClient(
         await writeAppClient(client, templates, outputPath, httpClient, clientName, postfix);
     }
 
-    if (exportCore || exportServices || exportSchemas || exportModels || exportClient) {
+    if (exportCore || exportServices || exportSchemas || exportModels || exportClient || exportHooks) {
         await mkdir(outputPath);
         await writeClientIndex(
             client,
@@ -102,6 +122,7 @@ export async function writeClient(
             clientName,
             useUnionTypes,
             exportCore,
+            exportHooks,
             exportServices,
             exportModels,
             exportSchemas,

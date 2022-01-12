@@ -17,6 +17,7 @@ export type Options = {
     useOptions?: boolean;
     useUnionTypes?: boolean;
     exportCore?: boolean;
+    exportHooks?: boolean;
     exportServices?: boolean;
     exportModels?: boolean;
     exportSchemas?: boolean;
@@ -56,6 +57,7 @@ export async function generate({
     exportServices = true,
     exportModels = true,
     exportSchemas = false,
+    exportHooks = false,
     postfix = 'Service',
     exportClient = false,
     clientName = 'AppClient',
@@ -83,6 +85,7 @@ export async function generate({
                 useOptions,
                 useUnionTypes,
                 exportCore,
+                exportHooks,
                 exportServices,
                 exportModels,
                 exportSchemas,
@@ -109,6 +112,7 @@ export async function generate({
                 exportServices,
                 exportModels,
                 exportSchemas,
+                exportHooks,
                 postfix,
                 exportClient,
                 clientName,

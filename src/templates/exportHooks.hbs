@@ -1,0 +1,31 @@
+{{>header}}
+
+
+import { ApiError } from '../core/ApiError';
+{{#if imports}}
+  {{#each imports}}
+    import type { {{{this}}} } from '../models/{{{this}}}';
+  {{/each}}
+{{/if}}
+import { {{{@root.clientName}}} } from '../client';
+import { use{{{clientName}}} } from './context';
+import { useQuery } from 'react-query';
+{{#each operations}}
+{{~#equals method "GET"}}
+
+export function use{{{capitalize name}}}({{>parameters}}): {{>result}} {
+const client = use{{{../clientName}}}() as {{{@root.clientName}}};
+return useQuery<{{>result}}, ApiError>([
+{{#each ../imports}}
+'{{{this}}}',
+{{/each}}
+'{{{name}}}', {{>passParameters}}],
+async () => await client?.{{{../shortName}}}.{{{name}}}({{>passParameters}}) ?? null,
+{ suspense: true, useErrorBoundary: true }
+).data as {{>result}};
+}
+{{~#equals 1 1}}
+
+{{/equals}}
+{{~/equals~}}
+{{/each}}
