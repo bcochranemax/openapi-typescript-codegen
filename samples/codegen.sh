@@ -18,4 +18,4 @@ rm -rf dist
 #java -jar ./swagger-codegen-cli-v3.jar generate -i spec/v3.json -l typescript-fetch -o generated/v3/typescript-fetch/
 
 #node ../bin/index.js --input spec/v2.json --output generated/v2/openapi-typescript-codegen/
-node ../bin/index.js --input spec/v3.json --output generated/v3/openapi-typescript-codegen/ -c axios --exportClient true --name TestClient --useOptions --exportModels true --exportSchemas true
+node ../bin/index.js --input spec/api.yaml --output generated/v3/openapi-typescript-codegen/ -c axios --exportClient true --name TestClient --useOptions --exportModels true --exportSchemas true

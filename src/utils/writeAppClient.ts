@@ -1,12 +1,12 @@
-import {resolve} from 'path';
+import camelcase from 'camelcase';
+import { resolve } from 'path';
 
-import {Client} from '../client/interfaces/Client';
-import {HttpClient} from '../HttpClient';
-import {writeFile} from './fileSystem';
-import {getHttpRequestName} from './getHttpRequestName';
-import {Templates} from './registerHandlebarTemplates';
-import {sortServicesByName} from './sortServicesByName';
-import camelcase from "camelcase";
+import { Client } from '../client/interfaces/Client';
+import { HttpClient } from '../HttpClient';
+import { writeFile } from './fileSystem';
+import { getHttpRequestName } from './getHttpRequestName';
+import { Templates } from './registerHandlebarTemplates';
+import { sortServicesByName } from './sortServicesByName';
 
 /**
  * Generate App Client class using the Handlebar template and write to disk.
@@ -18,28 +18,28 @@ import camelcase from "camelcase";
  * @param postfix Service name postfix
  */
 export async function writeAppClient(
-    client: Client,
-    templates: Templates,
-    outputPath: string,
-    httpClient: HttpClient,
-    clientName: string,
-    postfix: string
+  client: Client,
+  templates: Templates,
+  outputPath: string,
+  httpClient: HttpClient,
+  clientName: string,
+  postfix: string,
 ): Promise<void> {
-    await writeFile(
-        resolve(outputPath, 'client.ts'),
-        templates.client({
-            services: sortServicesByName(client.services)
-                .filter(s => s.name !== 'Service')
-                .map(s => ({
-                    name: s.name + postfix,
-                    shortName: camelcase(s.name.replace('Service', '')),
-                })),
-            service: client.services.find(s => s.name === 'Service'),
-            clientName,
-            httpClientRequest: getHttpRequestName(httpClient),
-            server: client.server,
-            version: client.version,
-            postfix,
-        })
-    );
+  await writeFile(
+    resolve(outputPath, 'client.ts'),
+    templates.client({
+      services: sortServicesByName(client.services)
+        // .filter(s => s.name !== 'Service')
+        .map(s => ({
+          name: s.name + postfix,
+          shortName: camelcase(s.name.replace(/(?!^)Service$/, '')),
+        })),
+      service: client.services.map(s => ({ ...s, name: s.name + postfix })).find(s => s.name === 'Service' + postfix),
+      clientName,
+      httpClientRequest: getHttpRequestName(httpClient),
+      server: client.server,
+      version: client.version,
+      postfix,
+    }),
+  );
 }

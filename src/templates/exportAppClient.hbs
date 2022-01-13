@@ -5,7 +5,14 @@ import type { OpenAPIConfig } from './core/OpenAPI';
 import { {{{httpClientRequest}}} } from './core/{{{httpClientRequest}}}';
 {{#if services}}
 {{#each services}}
+{{#if ../service}}
+{{~#notEquals name ../service.name}}
 import { {{{name}}} } from './services/{{{name}}}';
+{{~/notEquals~}}
+{{else}}
+import { {{{name}}} } from './services/{{{name}}}';
+{{/if}}
+
 {{/each}}
 {{/if}}
 {{#if service}}
