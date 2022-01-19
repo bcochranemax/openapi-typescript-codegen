@@ -10,10 +10,12 @@ import { ApiError } from '../core/ApiError';
 import { {{{@root.clientName}}} } from '../client';
 import { use{{{clientName}}} } from './context';
 import { useQuery } from 'react-query';
+import type { UseQueryOptions } from 'react-query';
 {{#each operations}}
 {{~#equals method "GET"}}
 
-export function use{{{capitalize name}}}({{>parameters}}): {{>result}} {
+export function use{{{capitalize name}}}({{>parameters}},
+options: Omit<UseQueryOptions<{{>result}}, ApiError>, 'queryKeys' | 'queryFn'> = {}): {{>result}} {
 const client = use{{{../clientName}}}() as {{{@root.clientName}}};
 return useQuery<{{>result}}, ApiError>([
 {{#each ../imports}}
@@ -21,7 +23,7 @@ return useQuery<{{>result}}, ApiError>([
 {{/each}}
 '{{{name}}}', {{>passParameters}}],
 async () => await client?.{{{../shortName}}}.{{{name}}}({{>passParameters}}) ?? null,
-{ suspense: true, useErrorBoundary: true }
+{ suspense: true, useErrorBoundary: true, ...options }
 ).data as {{>result}};
 }
 {{~#equals 1 1}}
